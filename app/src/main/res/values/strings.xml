@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Firebase Gmail Password Authentication</string>
+    <string name="forget_password_click_here">Forget Password? <u>Click Here</u></string>
 </resources>

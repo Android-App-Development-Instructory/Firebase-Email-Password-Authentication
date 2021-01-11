@@ -14,9 +14,11 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -36,6 +38,7 @@ public class RegisterActivity extends AppCompatActivity {
         sign_upBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 name = nameET.getText().toString();
                 email = emailET.getText().toString();
                 password = passwordET.getText().toString();
@@ -73,6 +76,20 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
+
+                    FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+                    firebaseUser.sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Toast.makeText(RegisterActivity.this, "Verification Link Sent Successfully.", Toast.LENGTH_SHORT).show();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(RegisterActivity.this, "Error: "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
                     Toast.makeText(RegisterActivity.this, "Account Created Successfully", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(RegisterActivity.this,LoginActivity.class);
                     startActivity(intent);
